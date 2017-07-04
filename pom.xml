@@ -13,12 +13,10 @@
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <version.library.guava>20.0</version.library.guava>
         <version.library.jsr305>3.0.1</version.library.jsr305>
         <version.library.groovy>2.4.11</version.library.groovy>
         <version.library.intellij-annotations>15.0</version.library.intellij-annotations>
         <version.library.commons-lang3>3.5</version.library.commons-lang3>
-        <version.library.commons-io>2.5</version.library.commons-io>
         <version.library.fastutil>7.0.13</version.library.fastutil>
         <version.library.snakeyaml>1.17</version.library.snakeyaml>
         <version.library.gson>2.8.0</version.library.gson>
@@ -37,26 +35,18 @@
             <groupId>javax.vecmath</groupId>
             <artifactId>vecmath</artifactId>
             <version>${version.library.vecmath}</version>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>it.unimi.dsi</groupId>
             <artifactId>fastutil</artifactId>
             <version>${version.library.fastutil}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>${version.library.guava}</version>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>${version.library.commons-lang3}</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>${version.library.commons-io}</version>
         </dependency>
         <dependency>
             <groupId>org.yaml</groupId>
@@ -77,24 +67,33 @@
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
             <version>${version.library.intellij-annotations}</version>
+            <scope>provided</scope>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>com.google.code.findbugs</groupId>
             <artifactId>jsr305</artifactId>
             <version>${version.library.jsr305}</version>
+            <scope>provided</scope>
+            <optional>true</optional>
         </dependency>
-
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>${version.library.slf4j}</version>
             <optional>true</optional>
-            <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>20.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

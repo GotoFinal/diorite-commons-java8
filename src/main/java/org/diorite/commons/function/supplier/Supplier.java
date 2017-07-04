@@ -34,6 +34,6 @@ package org.diorite.commons.function.supplier;
  * @param <T>
  *         the type of results supplied by this supplier
  */
-public interface Supplier<T> extends java.util.function.Supplier<T>, com.google.common.base.Supplier<T>
+public interface Supplier<T> extends java.util.function.Supplier<T>//, com.google.common.base.Supplier<T>
 {
 }
