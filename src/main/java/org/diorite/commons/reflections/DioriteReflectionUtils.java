@@ -67,7 +67,7 @@ public final class DioriteReflectionUtils
             methodModifiersOffset = unsafe.objectFieldOffset(methodModifiers);
             fieldModifiers = Field.class.getDeclaredField("modifiers");
             fieldModifiersOffset = unsafe.objectFieldOffset(fieldModifiers);
-            if(System.getProperty("java.specification.version").startsWith("1."))
+            if (System.getProperty("java.specification.version").startsWith("1."))
             {
                 setAccessible = null;
             }
