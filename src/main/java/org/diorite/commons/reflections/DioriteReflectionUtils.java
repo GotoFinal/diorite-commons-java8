@@ -67,21 +67,13 @@ public final class DioriteReflectionUtils
             methodModifiersOffset = unsafe.objectFieldOffset(methodModifiers);
             fieldModifiers = Field.class.getDeclaredField("modifiers");
             fieldModifiersOffset = unsafe.objectFieldOffset(fieldModifiers);
-            Method setAccessible0 = null;
-            try
+            if(System.getProperty("java.specification.version").startsWith("1."))
             {
-                setAccessible0 = AccessibleObject.class.getDeclaredMethod("setAccessible0", boolean.class);
+                setAccessible = null;
             }
-            catch (NoSuchMethodException ignored)
+            else
             {
-                System.err.println("Ignore that error if you are on java 8 (and shit in pants if it is java 9):\n===========================================================================================");
-                ignored.printStackTrace();
-                System.err.println("===========================================================================================");
-                // java 8, we don't care about that error.
-            }
-            setAccessible = setAccessible0;
-            if (setAccessible != null)
-            {
+                setAccessible = AccessibleObject.class.getDeclaredMethod("setAccessible0", boolean.class);
                 setForceAccessible(setAccessible);
             }
         }
