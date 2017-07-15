@@ -38,6 +38,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.diorite.commons.arrays.DioriteArrayUtils;
+
 import sun.misc.Unsafe;
 
 @SuppressWarnings({"unchecked", "ObjectEquality", "Duplicates"})
@@ -1550,14 +1552,7 @@ public final class DioriteReflectionUtils
      */
     public static Class<?> getCanonicalClass(String canonicalName) throws IllegalArgumentException
     {
-        try
-        {
-            return Class.forName(canonicalName);
-        }
-        catch (ClassNotFoundException e)
-        {
-            throw new IllegalArgumentException("Cannot find " + canonicalName, e);
-        }
+        return getCanonicalClass(canonicalName, DioriteArrayUtils.getEmptyObjectArray(ClassLoader.class));
     }
 
     /**
@@ -1571,13 +1566,100 @@ public final class DioriteReflectionUtils
     @Nullable
     public static Class<?> tryGetCanonicalClass(String canonicalName)
     {
+        return tryGetCanonicalClass(canonicalName, DioriteArrayUtils.getEmptyObjectArray(ClassLoader.class));
+    }
+
+    /**
+     * Return class for given name or throw exception.
+     *
+     * @param canonicalName
+     *         name of class to find.
+     * @param loaders
+     *         additional class loaders to lookup.
+     *
+     * @return class for given name.
+     *
+     * @exception IllegalArgumentException
+     *         if there is no class with given name.
+     */
+    public static Class<?> getCanonicalClass(String canonicalName, ClassLoader... loaders) throws IllegalArgumentException
+    {
         try
         {
             return Class.forName(canonicalName);
         }
         catch (ClassNotFoundException e)
         {
-            return null;
+            try
+            {
+                ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
+                if (contextClassLoader == null)
+                {
+                    throw new IllegalArgumentException("Cannot find " + canonicalName, e);
+                }
+                return contextClassLoader.loadClass(canonicalName);
+            }
+            catch (ClassNotFoundException e2)
+            {
+                e2.addSuppressed(e);
+                for (ClassLoader loader : loaders)
+                {
+                    try
+                    {
+                        return loader.loadClass(canonicalName);
+                    }
+                    catch (ClassNotFoundException ignored)
+                    {
+                        e2.addSuppressed(ignored);
+                    }
+                }
+                throw new IllegalArgumentException("Cannot find " + canonicalName, e2);
+            }
+        }
+    }
+
+    /**
+     * Return class for given name or null.
+     *
+     * @param canonicalName
+     *         name of class to find.
+     * @param loaders
+     *         additional class loaders to lookup.
+     *
+     * @return class for given name or null.
+     */
+    @Nullable
+    public static Class<?> tryGetCanonicalClass(String canonicalName, ClassLoader... loaders)
+    {
+        try
+        {
+            return Class.forName(canonicalName);
+        }
+        catch (ClassNotFoundException e)
+        {
+            try
+            {
+                ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
+                if (contextClassLoader == null)
+                {
+                    return null;
+                }
+                return contextClassLoader.loadClass(canonicalName);
+            }
+            catch (ClassNotFoundException e2)
+            {
+                for (ClassLoader loader : loaders)
+                {
+                    try
+                    {
+                        return loader.loadClass(canonicalName);
+                    }
+                    catch (ClassNotFoundException ignored)
+                    {
+                    }
+                }
+                return null;
+            }
         }
     }
 
